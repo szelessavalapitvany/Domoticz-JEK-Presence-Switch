@@ -12,9 +12,6 @@ Version: 1.0.0 (majus 25, 2025)
 		Jelenlét érzékelő segítségéval automatikusan kapcsolhatók eszközök. / Devices can be switched on automatically using a presence sensor.
 	<br/>
 	<br/>
-		Beállítható érkezés és távozást követő késleltetés ideje a kapcsolásokhoz. / Delay time for switching after arrival and departure can be set.
-	<br/>
-	<br/>
 		<strong><a href="#/Custom/JEK_Jelenlet_kapcsolo_Show_switch">HTML setup!</a></strong> (Csak már létező modulhoz!/Only for existing modules!)
 	<br/>
 	<br/>
