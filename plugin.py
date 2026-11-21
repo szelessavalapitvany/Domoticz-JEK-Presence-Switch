@@ -21,11 +21,11 @@ Version: 1.0.0 (majus 25, 2025)
 		<param field="Port" label="Port" width="40px" required="true" default="8080"/>
 		<param field="Username" label="Username" width="200px" required="false" default=""/>
 		<param field="Password" label="Password" width="200px" required="false" default=""/>
-		<param field="Mode1" label="Érkezéskor ON /  On arrival ON (csv list of idx)" width="100px" required="false" default=""/>
-		<param field="Mode2" label="Érkezéskor OFF / OFF upon arrival (csv list of idx)" width="100px" required="false" default=""/>
-		<param field="Mode3" label="Távozáskor ON / When leaving ON (csv list of idx)" width="100px" required="false" default=""/>
-		<param field="Mode4" label="Távozáskor OFF / When leaving, OFF (csv list of idx)" width="100px" required="false" default=""/>
-		<param field="Mode5" label="Jelenlét neve / Presence name (opciónális érték)" width="200px" required="false" default=""/>
+		<param field="Mode1" label="On arrival ON / Érkezéskor ON (csv list of idx)" width="100px" required="false" default=""/>
+		<param field="Mode2" label="OFF upon arrival / Érkezéskor OFF (csv list of idx)" width="100px" required="false" default=""/>
+		<param field="Mode3" label="When leaving ON / Távozáskor ON (csv list of idx)" width="100px" required="false" default=""/>
+		<param field="Mode4" label="When leaving OFF / Távozáskor OFF  (csv list of idx)" width="100px" required="false" default=""/>
+		<param field="Mode5" label="Presence name / Jelenlét neve" width="200px" required="false" default=""/>
 		<param field="Mode6" label="Logging Level" width="200px">
 			<options>
 				<option label="Normal" value="Normal"  default="true"/>
@@ -167,7 +167,7 @@ class BasePlugin:
 		self.tavozas_on = parseCSV(Parameters["Mode3"])
 		self.tavozas_off = parseCSV(Parameters["Mode4"])
 
-		Domoticz.Error("erkezes_on={} erkezes_off={} tavozas_on={} tavozas_off={}".format(self.erkezes_on, self.erkezes_off, self.tavozas_on, self.tavozas_off))
+		Domoticz.Debug("erkezes_on={} erkezes_off={} tavozas_on={} tavozas_off={}".format(self.erkezes_on, self.erkezes_off, self.tavozas_on, self.tavozas_off))
 
 	def onStop(self):
 		Domoticz.Debugging(0)
@@ -251,11 +251,20 @@ class BasePlugin:
 		if format(command) == "On":
 			nvalue = 1
 			svalue = "On"
-		else :
+		else:
 			nvalue = 0
 			svalue = "Off"
-		
-		Devices[2].Update(nValue=nvalue, sValue=svalue)
+
+		# Unit 2: kívánt állapot
+		if Devices[2].nValue != nvalue or Devices[2].sValue != svalue:
+			Devices[2].Update(nValue=nvalue, sValue=svalue)
+
+		# Unit 3: ellentétes állapot
+		opposite_nvalue = 1 - nvalue
+		opposite_svalue = "Off" if nvalue else "On"
+
+		if Devices[3].nValue != opposite_nvalue or Devices[3].sValue != opposite_svalue:
+			Devices[3].Update(nValue=opposite_nvalue, sValue=opposite_svalue)
 
 	def switch_tavozas_on(self):
 
@@ -293,11 +302,20 @@ class BasePlugin:
 		if format(command) == "On":
 			nvalue = 1
 			svalue = "On"
-		else :
+		else:
 			nvalue = 0
 			svalue = "Off"
-		
-		Devices[3].Update(nValue=nvalue, sValue=svalue)
+
+		# Unit 3: kívánt állapot
+		if Devices[3].nValue != nvalue or Devices[3].sValue != svalue:
+			Devices[3].Update(nValue=nvalue, sValue=svalue)
+
+		# Unit 2: ellentétes állapot
+		opposite_nvalue = 1 - nvalue
+		opposite_svalue = "Off" if nvalue else "On"
+
+		if Devices[2].nValue != opposite_nvalue or Devices[2].sValue != opposite_svalue:
+			Devices[2].Update(nValue=opposite_nvalue, sValue=opposite_svalue)
 
 	def switch_erkezes_off(self):
 
@@ -335,11 +353,20 @@ class BasePlugin:
 		if format(command) == "On":
 			nvalue = 1
 			svalue = "On"
-		else :
+		else:
 			nvalue = 0
 			svalue = "Off"
-		
-		Devices[4].Update(nValue=nvalue, sValue=svalue)
+
+		# Unit 4: kívánt állapot
+		if Devices[4].nValue != nvalue or Devices[4].sValue != svalue:
+			Devices[4].Update(nValue=nvalue, sValue=svalue)
+
+		# Unit 5: ellentétes állapot
+		opposite_nvalue = 1 - nvalue
+		opposite_svalue = "Off" if nvalue else "On"
+
+		if Devices[5].nValue != opposite_nvalue or Devices[5].sValue != opposite_svalue:
+			Devices[5].Update(nValue=opposite_nvalue, sValue=opposite_svalue)
 
 	def switch_tavozas_off(self):
 
@@ -377,11 +404,20 @@ class BasePlugin:
 		if format(command) == "On":
 			nvalue = 1
 			svalue = "On"
-		else :
+		else:
 			nvalue = 0
 			svalue = "Off"
-		
-		Devices[5].Update(nValue=nvalue, sValue=svalue)
+
+		# Unit 5: kívánt állapot
+		if Devices[5].nValue != nvalue or Devices[5].sValue != svalue:
+			Devices[5].Update(nValue=nvalue, sValue=svalue)
+
+		# Unit 4: ellentétes állapot
+		opposite_nvalue = 1 - nvalue
+		opposite_svalue = "Off" if nvalue else "On"
+
+		if Devices[4].nValue != opposite_nvalue or Devices[4].sValue != opposite_svalue:
+			Devices[4].Update(nValue=opposite_nvalue, sValue=opposite_svalue)
 
 	def WriteLog(self, message, level="Normal"):
 
