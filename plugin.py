@@ -1,10 +1,10 @@
 """
 Jelenlet Kapcsolo python plugin for Domoticz
 Author: szelessav,
-Version: 1.0.0 (majus 25, 2025) 
+Version: 1.1.0 (2026-11-21) 
 """
 """
-<plugin key="JEK" name="Presence Switch / Jelenlét Kapcsoló" author="szelessav" version="1.0.0">
+<plugin key="JEK" name="Presence Switch / Jelenlét Kapcsoló" author="szelessav" version="1.1.0">
 	<description>
 		<h2>Presence Switch / Jelenlét Kapcsoló</h2><br/>
 	<br/>
