@@ -4,9 +4,9 @@ Author: szelessav,
 Version: 1.0.0 (majus 25, 2025) 
 """
 """
-<plugin key="JEK" name="Jelenlét Kapcsoló" author="szelessav" version="1.0.0">
+<plugin key="JEK" name="Presence Switch / Jelenlét Kapcsoló" author="szelessav" version="1.0.0">
 	<description>
-		<h2>Jelenlét Kapcsoló / Presence Switch</h2><br/>
+		<h2>Presence Switch / Jelenlét Kapcsoló</h2><br/>
 	<br/>
 	<br/>
 		Jelenlét érzékelő segítségéval automatikusan kapcsolhatók eszközök. / Devices can be switched on automatically using a presence sensor.
