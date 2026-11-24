@@ -1,0 +1,21 @@
+{
+	"No active plugins!": "Ingen aktive plugins!",
+	"The last day:": "Det seneste døgn:",
+	"Data sent:": "Sendte data:",
+	"Data is successfully saved": "Dataene blev gemt korrekt i",
+	"It was a mistake": "Der opstod en fejl ved",
+	"when saving event data.": "lagring af hændelsesdata.",
+	"Logging level": "Logningsniveau",
+	"Save": "Gem",
+	"Setting of operating parameters": "Indstilling af driftsparametre",
+	"➕ Add external thermometer": "➕ Tilføj udendørstermometer",
+	"On arrival ON": "TÆND ved ankomst",
+	"OFF upon arrival": "SLUK ved ankomst",
+	"When leaving ON": "TÆND ved afgang",
+	"When leaving, OFF": "SLUK ved afgang",
+	"➕ Add  On arrival ON": "➕ Tilføj TÆND ved ankomst",
+	"➕ Add OFF upon arrival": "➕ Tilføj SLUK ved ankomst",
+	"➕ Add When leaving ON": "➕ Tilføj TÆND ved afgang",
+	"➕ Add When leaving, OFF": "➕ Tilføj SLUK ved afgang",
+	"Presence name": "Navn på tilstedeværelse"
+}

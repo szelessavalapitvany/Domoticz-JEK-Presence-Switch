@@ -1,0 +1,21 @@
+{
+	"No active plugins!": "Nenhum plugin ativo!",
+	"The last day:": "Últimas 24 horas:",
+	"Data sent:": "Dados enviados:",
+	"Data is successfully saved": "Dados guardados com sucesso em",
+	"It was a mistake": "Ocorreu um erro ao",
+	"when saving event data.": "guardar os dados do evento.",
+	"Logging level": "Nível de registo",
+	"Save": "Guardar",
+	"Setting of operating parameters": "Configuração dos parâmetros de funcionamento",
+	"➕ Add external thermometer": "➕ Adicionar termómetro exterior",
+	"On arrival ON": "Ao chegar LIGAR",
+	"OFF upon arrival": "Ao chegar DESLIGAR",
+	"When leaving ON": "Ao sair LIGAR",
+	"When leaving, OFF": "Ao sair DESLIGAR",
+	"➕ Add  On arrival ON": "➕ Adicionar LIGAR ao chegar",
+	"➕ Add OFF upon arrival": "➕ Adicionar DESLIGAR ao chegar",
+	"➕ Add When leaving ON": "➕ Adicionar LIGAR ao sair",
+	"➕ Add When leaving, OFF": "➕ Adicionar DESLIGAR ao sair",
+	"Presence name": "Nome da presença"
+}

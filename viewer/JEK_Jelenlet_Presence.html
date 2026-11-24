@@ -1,0 +1,761 @@
+	<script>
+	var address = window.location.hostname;
+	var port = window.location.port;
+	var proto = window.location.protocol + '//';
+
+	if (typeof window.TranslationLoader === 'undefined') {
+
+		class TranslationLoader {
+			constructor() {
+				this.translations = {};
+				this.loadTranslations().then((translations) => {
+					this.translations = translations;
+					if ($.isEmptyObject(this.translations)) {
+						console.log("Hiba történt a fordítások betöltése közben!");
+					} else {
+						this.translatePage();
+					}
+				});
+			}
+
+			async loadTranslations() {
+				
+				// Ellenőrzés, hogy a szükséges változók léteznek-e
+				if (typeof proto === 'undefined' || typeof address === 'undefined' || typeof port === 'undefined') {
+					console.error("Hiányzik a 'proto', 'address' vagy 'port' változó.");
+					return {};
+				}
+
+				let aktlanguage;
+
+				const settingsUrl = `${proto}${address}:${port.toString()}/json.htm?type=command&param=getsettings`;
+
+				await fetch(settingsUrl)
+					.then(response => {
+						if (!response.ok) {
+							throw new Error('Hálózati hiba történt');
+						}
+						return response.json();
+					})
+					.then(data => {
+						if (data) {
+							aktlanguage = data.Language;
+						} else {
+							console.error('Nem található nyelvi információ.');
+						}
+					})
+					.catch(error => {
+						console.error('Hiba a beállítások lekérése közben:', error);
+					});
+
+				console.log (aktlanguage)
+
+				const filePath = `/templates/jek_html_translate_${aktlanguage}.json`;
+				try {
+					const response = await $.getJSON(filePath);
+					return response;
+				} catch (error) {
+					console.log(`Hiba történt a '${filePath}' fájl betöltése közben: ${error}`);
+					return {};
+				}
+			}
+
+			t(text) {
+				return this.translations[text] || text;
+			}
+			translatePage() {
+				$('[data-translate]').each((index, element) => {
+					const key = $(element).data('translate');
+					const translation = this.t(key);
+					$(element).text(translation);
+				});
+				//console.log("Oldal sikeresen leforditva.");
+			}
+		}
+
+		window.TranslationLoader = TranslationLoader;
+	}
+
+		var script = document.createElement('script');
+		script.src = 'templates/jek_viewer.js?' + Date.now();
+		document.head.appendChild(script);
+		
+	</script>
+	<div id="jek_content"/>
+	<div id="saveStatus" aria-hidden="true">
+		<svg viewBox="0 0 50 50" class="spin-icon" xmlns="http://www.w3.org/2000/svg">
+			<circle cx="25" cy="25" r="20" fill="none" stroke="#eee" stroke-width="5" stroke-linecap="round" stroke-dasharray="90" stroke-dashoffset="60"/>
+		</svg>
+	</div>
+	<h1 id="status"></h1>
+	<style>
+		body { font-family: sans-serif; font-size:9pt; padding: 20px; }
+		#saveStatus {
+			position: fixed;
+			top: 0px;
+			right: 0px;
+			width: 100%;
+			height: 100%;
+			z-index: 9999;
+			background-color: #fff;
+		}
+
+		.spin-icon {
+			width: 100%;
+			height: 100%;
+			animation: spin 1s linear infinite;
+		}
+
+		@keyframes spin {
+			0% { transform: rotate(0deg); }
+			100% { transform: rotate(360deg); }
+		}
+		.save-data {
+			background-color: #00759f;
+			border: none !important;
+			color: #fff;
+			cursor: pointer;
+			padding-top: 8px;
+			padding-bottom: 8px;
+			line-height: 20px;
+			padding-right: 12px;
+			padding-left: 12px;
+			margin-right: 2px;
+			font-size: 10pt;
+			font-weight: bold;
+			margin-bottom: 50px;
+			width: 100px;
+			margin-top: 25px;
+			float:right;
+		}
+		.device {
+			border: 1px solid #999;
+			padding: 10px;
+			background-color: #eee;
+			cursor: grab;
+			display: inline-block;
+			margin: 5px 5px 5px 0;
+		}
+		.drop-target {
+			border: 1px solid #aaa;
+			min-height: 40px;
+			padding: 5px;
+			background-color: #fff;
+			margin-top: 5px;
+		}
+		.drop-target.dragover {
+			border-color: #007bff;
+			background-color: #f0faff;
+		}
+		.chooser-toggle {
+			cursor: pointer;
+			color: #007bff;
+			font-size: 0.9em;
+			margin-bottom: 5px;
+			display: inline-block;
+		}
+		.chooser-box {
+			display: none;
+			padding: 5px;
+			border: 2px dashed #ddd;
+			background: #f9f9f9;
+			margin-bottom: 10px;
+		}
+		.zone-block {
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			padding: 15px;
+			margin-bottom: 30px;
+			background-color: #fdfdfd;
+		}
+		.input-small {
+			width: 2ch;
+			background-color: #fff !important;
+			font-size: 10pt;
+		}
+		.input-normal {
+			width: 20ch;
+			background-color: #fff !important;
+			font-size: 10pt;
+		}
+		.paramname {
+			font-weight:bold;
+			font-size: 12pt !important;
+			margin-right: 20px;
+		}
+	</style>
+	<script>
+
+	Date.prototype.yyyymmdd_hhmm = function() {
+		return this.getFullYear().toString() +
+			("0" + (this.getMonth() + 1)).slice(-2) +
+			("0" + this.getDate()).slice(-2) + "_" +
+			("0" + this.getHours()).slice(-2) +
+			("0" + this.getMinutes()).slice(-2);
+	};
+
+
+	function showSaveStatus() {
+		console.log("saveStatus");
+		document.getElementById("saveStatus").style.display = "block";
+	}
+
+	function hideSaveStatus() {
+		document.getElementById("saveStatus").style.display = "none";
+	}
+
+	if (typeof window.translationLoader === 'undefined') {
+		window.translationLoader = new TranslationLoader();
+	}
+
+	translationLoader.loadTranslations().then(() => {
+		function download(filename, text) {
+			var element = document.createElement('a');
+			element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+			element.setAttribute('download', filename);
+
+			element.style.display = 'none';
+			document.body.appendChild(element);
+
+			element.click();
+
+			document.body.removeChild(element);
+		}
+
+		function showUsageChart(data, i) {
+			
+			var chartElement = $('#graphk'+i);
+			
+			var series = [];
+
+			if(data.onon != undefined) {
+				series.push({
+					name: translationLoader.t("On arrival ON"),
+					yAxis: 0,
+					data: data.onon.map(function (item) {
+						return {
+							x: +(new Date(item.Date)),
+							y: item.Data === "On" ? 100 : 0
+						}
+					})
+				});
+			}
+			if(data.onoff != undefined) {
+				series.push({
+					name: translationLoader.t("OFF upon arrival"),
+					yAxis: 0,
+					data: data.onoff.map(function (item) {
+						return {
+							x: +(new Date(item.Date)),
+							y: item.Data === "On" ? 100 : 0
+						}
+					})
+				});
+			}
+			if(data.offon != undefined) {
+				series.push({
+					name: translationLoader.t("When leaving ON"),
+					yAxis: 0,
+					data: data.offon.map(function (item) {
+						return {
+							x: +(new Date(item.Date)),
+							y: item.Data === "On" ? 100 : 0
+						}
+					})
+				});
+			}
+			if(data.offoff != undefined) {
+				series.push({
+					name: translationLoader.t("When leaving, OFF"),
+					yAxis: 0,
+					step: true,
+					data: data.offoff.map(function (item) {
+						return {
+							x: +(new Date(item.Date)),
+							y: item.Data === "On" ? 100 : 0
+						}
+					})
+				});
+			}
+			chartElement.highcharts({
+				chart: {
+					zoomType: 'x'
+				},
+				title: {
+					text: ''
+				},
+				xAxis: {
+					type: 'datetime',
+					minTickInterval: 24 * 3600 * 1000
+				},
+				yAxis: [
+					{
+						title: {
+							text: translationLoader.t("ON / OFF")
+						},
+						maxPadding: 0
+					}
+				],
+				tooltip: {
+					formatter: function () {
+						return Highcharts.dateFormat('%Y-%m-%d %H:%M', this.x) + '<br/>' + this.series.name + ': ' + Highcharts.numberFormat(this.y,1);
+					}
+				},
+				plotOptions: {
+					column: {
+						minPointLength: 4,
+						pointPadding: 0.1,
+						groupPadding: 0,
+						dataLabels: {
+							enabled: true,
+							color: 'white',
+							format: '{y} °C'
+						}
+					},
+					series: {
+						turboThreshold : 0
+					}
+				},
+				legend: {
+					enabled: true
+				},
+				series: series
+			});
+		}
+		var jek=getJelen();
+		var askJSON = getRequestParam("jelenHistory");
+		if(askJSON != undefined) {
+			var th = jek.filter((t) => t.name == askJSON);
+			if(th.length > 0) {
+				var s = JSON.stringify(jek[0]);
+				download(jek[0].name+'_'+new Date().yyyymmdd_hhmm(), s);
+			}
+		} else {
+
+			if (nodata) {
+				document.getElementById("status").innerText = translationLoader.t("No active plugins!");
+				hideSaveStatus();
+				return;
+			}
+			for(var i=0;i<jek.length;i++) {
+
+				var table = document.createElement('table');
+				table.setAttribute('style', 'border-spacing: 5px;');
+				document.getElementById('jek_content').appendChild(table);
+
+				var row = table.insertRow();
+				var cell1 = row.insertCell(0);
+				
+				var redname = document.createElement('h1');
+				redname.setAttribute('style', 'margin-top:15px; margin-bottom: 10px;');
+				redname.innerText = jek[i].name;
+				cell1.appendChild(redname);
+
+				var row = table.insertRow();
+				var cell1 = row.insertCell(0);
+
+				// graf ----------------------------------------------------------------
+				
+				var element = document.createElement('h2');
+				element.innerText = translationLoader.t("The last day:");
+				element.setAttribute('style', 'margin-top:15px; margin-bottom: 10px;');
+				document.getElementById('jek_content').appendChild(element);
+				
+				element = document.createElement('div');
+				element.setAttribute('class', 'device-log-chart');
+				element.setAttribute('style', 'margin-bottom: 60px;');
+				element.setAttribute('id', 'graphk'+i);
+				document.getElementById('jek_content').appendChild(element);
+				showUsageChart(jek[i], i);
+
+				var table = document.createElement('table');
+				table.setAttribute('style', 'border-spacing: 5px;');
+				document.getElementById('jek_content').appendChild(table);
+
+				var row = table.insertRow();
+				var cell1 = row.insertCell(0);
+
+				var redcim = document.createElement('h2');
+				redcim.innerText = translationLoader.t("Setting of operating parameters");
+				cell1.appendChild(redcim);
+
+				function createChip(label, id, dropZone, hiddenInput, datasetKey, draggable = true) {
+					const chip = document.createElement('div');
+					chip.className = 'device';
+					chip.innerHTML = `${label} (ID: ${id}) <span class="remove-x" style="color:red; cursor:pointer; margin-left:8px;">✖</span>`;
+					chip.dataset.id = id;
+
+					if (draggable) {
+						chip.setAttribute('draggable', 'true');
+
+						chip.addEventListener('dragstart', e => {
+							e.dataTransfer.setData('remove-id', id);
+						});
+
+						chip.addEventListener('dragend', e => {
+							if (!dropZone.contains(chip)) {
+								chip.remove();
+								let updatedIds = dropZone.dataset[datasetKey].split(',').filter(existingId => existingId !== id);
+								dropZone.dataset[datasetKey] = updatedIds.join(',');
+								hiddenInput.value = updatedIds.join(',');
+							}
+						});
+					}
+
+					chip.querySelector('.remove-x').addEventListener('click', e => {
+						e.stopPropagation();
+						chip.remove();
+						let updatedIds = dropZone.dataset[datasetKey].split(',').filter(existingId => existingId !== id);
+						dropZone.dataset[datasetKey] = updatedIds.join(',');
+						hiddenInput.value = updatedIds.join(',');
+					});
+
+					return chip;
+				}
+
+				if (!jek[i].switchnameakt) jek[i].switchnameakt = [];
+
+				function createDropBlock(jek, i, config) {
+					const { mode, link, title, forparam, modePrefix, targetId, datasetKey, inputName } = config;
+
+					let table = document.createElement('table');
+					table.setAttribute('style', 'width:100%; border-spacing: 3px; margin-bottom: 10px;');
+					document.getElementById('jek_content').appendChild(table);
+
+					let row1 = table.insertRow();
+					let cell1 = row1.insertCell(0);
+
+					let chooserToggleName = document.createElement('span');
+					chooserToggleName.textContent = translationLoader.t(title);
+					chooserToggleName.className = 'paramname';
+					cell1.appendChild(chooserToggleName);
+
+					let chooserToggle = document.createElement('span');
+					chooserToggle.className = `chooser-toggle`;
+					chooserToggle.textContent = translationLoader.t(link);
+					chooserToggle.dataset.target = targetId+'_'+i;
+					cell1.appendChild(chooserToggle);
+
+					let chooserBox = document.createElement('div');
+					chooserBox.className = 'chooser-box';
+					chooserBox.id = `${targetId+'_'+i}_chooser`;
+
+					jek[i][forparam].forEach(entry => {
+						let [label, id] = entry.split(':');
+						let device = document.createElement('div');
+						device.className = 'device';
+						device.draggable = true;
+						device.dataset.id = id;
+						device.dataset.label = label;
+						device.dataset.target = targetId+'_'+i;
+						device.textContent = `${label} (idx: ${id})`;
+						chooserBox.appendChild(device);
+					});
+
+					cell1.appendChild(chooserBox);
+
+					let row2 = table.insertRow();
+					let cell2 = row2.insertCell(0);
+
+					let dropZone = document.createElement('div');
+					dropZone.className = 'drop-target';
+					dropZone.id = targetId+'_'+i;
+					dropZone.dataset[datasetKey] = '';
+					cell2.appendChild(dropZone);
+
+					let row3 = table.insertRow();
+					let cell3 = row3.insertCell(0);
+
+					let hiddenInput = document.createElement('input');
+					hiddenInput.type = 'hidden';
+					hiddenInput.name = inputName;
+					cell3.appendChild(hiddenInput);
+
+					chooserToggle.addEventListener('click', () => {
+						chooserBox.style.display = chooserBox.style.display === 'block' ? 'none' : 'block';
+					});
+
+					chooserBox.querySelectorAll('.device').forEach(dev => {
+						dev.addEventListener('dragstart', e => {
+							e.dataTransfer.setData('id', dev.dataset.id);
+							e.dataTransfer.setData('label', dev.dataset.label);
+							e.dataTransfer.setData('target', dev.dataset.target);
+						});
+					});
+
+					dropZone.addEventListener('dragover', e => {
+						e.preventDefault();
+						dropZone.classList.add('dragover');
+					});
+					dropZone.addEventListener('dragleave', () => {
+						dropZone.classList.remove('dragover');
+					});
+					dropZone.addEventListener('drop', e => {
+						e.preventDefault();
+						dropZone.classList.remove('dragover');
+						const id = e.dataTransfer.getData('id');
+						const label = e.dataTransfer.getData('label');
+						const target = e.dataTransfer.getData('target');
+						if (dropZone.id !== target) return;
+
+						let currentIds = dropZone.dataset[datasetKey] ? dropZone.dataset[datasetKey].split(',') : [];
+						if (!currentIds.includes(id)) {
+							let chip = createChip(label, id, dropZone, hiddenInput, datasetKey, false);  // nem draggable
+							dropZone.appendChild(chip);
+							currentIds.push(id);
+							dropZone.dataset[datasetKey] = currentIds.join(',');
+							hiddenInput.value = currentIds.join(',');
+						}
+					});
+
+					let modeRaw = jek[i] && typeof jek[i][mode] === 'string' ? jek[i][mode] : '';
+					let modeItems = modeRaw
+					.split(',')
+					.map(s => s.trim())
+					.filter(s => modePrefix === '' || s.startsWith(modePrefix + ':'))
+					.map(s => modePrefix === '' ? s : s.substring(modePrefix.length + 1));
+
+					let ids = [];
+					modeItems.forEach(idx => {
+						let found = jek[i][forparam].find(entry => entry.endsWith(':' + idx));
+						if (found) {
+							let [label, id] = found.split(':');
+							let chip = createChip(label, id, dropZone, hiddenInput, datasetKey, false);  // nem draggable
+							dropZone.appendChild(chip);
+							ids.push(id);
+						}
+					});
+					dropZone.dataset[datasetKey] = ids.join(',');
+					hiddenInput.value = ids.join(',');
+				}
+
+				window.dropBlockConfigs = [];
+
+				dropBlockConfigs.push({
+					mode: 'Mode1',
+					title: "On arrival ON",
+					link: "➕ Add  On arrival ON",
+					forparam: "switchnameakt",
+					modePrefix: '',
+					targetId: 'onon_temp',
+					datasetKey: 'onon',
+					inputName: 'onon_temp_id'
+				});
+				createDropBlock(jek, i, dropBlockConfigs.at(-1));
+
+				dropBlockConfigs.push({
+					mode: 'Mode2',
+					title: "OFF upon arrival",
+					link: "➕ Add OFF upon arrival",
+					forparam: "switchnameakt",
+					modePrefix: '',
+					targetId: 'onoff_temp',
+					datasetKey: 'onoff',
+					inputName: 'onoff_temp_id'
+				});
+				createDropBlock(jek, i, dropBlockConfigs.at(-1));
+
+				dropBlockConfigs.push({
+					mode: 'Mode3',
+					title: "When leaving ON",
+					link: "➕ Add When leaving ON",
+					forparam: "switchnameakt",
+					modePrefix: '',
+					targetId: 'offon_temp',
+					datasetKey: 'offon',
+					inputName: 'offon_temp_id'
+				});
+				createDropBlock(jek, i, dropBlockConfigs.at(-1));
+
+				dropBlockConfigs.push({
+					mode: 'Mode4',
+					title: "When leaving, OFF",
+					link: "➕ Add When leaving, OFF",
+					forparam: "switchnameakt",
+					modePrefix: '',
+					targetId: 'offoff_temp',
+					datasetKey: 'offoff',
+					inputName: 'offoff_temp_id'
+				});
+				createDropBlock(jek, i, dropBlockConfigs.at(-1));
+
+
+				// Mode5
+
+				var mode5 = jek[i].Mode5;
+
+				var table = document.createElement('table');
+				table.setAttribute('style', 'border-spacing: 3px; margin-bottom: 10px; background-color: #fff !important; border: 1px solid #aaa; width:100%; padding:10px;');
+				document.getElementById('jek_content').appendChild(table);
+
+				var row = table.insertRow();
+				var cell1 = row.insertCell(0);
+
+				var table = document.createElement('table');
+				table.setAttribute('style', 'border-spacing: 3px;');
+				cell1.appendChild(table);
+
+				var row = table.insertRow();
+				var cell1 = row.insertCell(0);
+				var cell2 = row.insertCell(1);
+
+
+				var update_jelen = document.createElement('h2');
+				update_jelen.innerText = translationLoader.t("Presence name")+':';
+				update_jelen.setAttribute('style', 'font-weight:bold;');
+				cell1.appendChild(update_jelen);
+
+				var update_jelen_value = document.createElement('input');
+				update_jelen_value.setAttribute('type', 'text');
+				update_jelen_value.setAttribute('id', 'text_1_mode5_' + i);
+				update_jelen_value.setAttribute('value', mode5);
+				update_jelen_value.classList.add('input-normal');
+				cell2.appendChild(update_jelen_value); 
+
+				// Mode6 --------------------------------------------------------------
+
+				var table = document.createElement('table');
+				table.setAttribute('style', 'border-spacing: 3px; margin-bottom: 10px; background-color: #fff !important; border: 1px solid #aaa; width:100%; padding:10px;');
+				document.getElementById('jek_content').appendChild(table);
+
+				var row = table.insertRow();
+				var cell1 = row.insertCell(0);
+
+				var table = document.createElement('table');
+				table.setAttribute('style', 'border-spacing: 3px;');
+				cell1.appendChild(table);
+
+				var row = table.insertRow();
+				var cell1 = row.insertCell(0);
+				var cell2 = row.insertCell(1);
+
+				var lograte = document.createElement('h2');
+				lograte.innerText = translationLoader.t("Logging level")+':';
+				lograte.setAttribute('style', 'font-weight:bold;');
+				cell1.appendChild(lograte);
+
+				var lograte_value = document.createElement('select');
+				lograte_value.setAttribute('id', 'text_1_mode6_' + i);
+
+				var options = [
+					{ value: 'Normal', text: 'Normál' },
+					{ value: 'Verbose', text: 'Verbose' },
+					{ value: '2', text: 'Debug - Python Only' },
+					{ value: '62', text: 'Debug - Basic' },
+					{ value: '126', text: 'Debug - Basic+Messages' },
+					{ value: '16', text: 'Debug - Connections Only' },
+					{ value: '144', text: 'Debug - Connections+Queue' },
+					{ value: '-1', text: 'Debug - All' }
+				];
+
+				options.forEach(function(opt) {
+					var option = document.createElement('option');
+					option.setAttribute('data-i18n', opt.text);
+					option.value = opt.value;
+					option.textContent = opt.text;
+					if (String(jek[i].Mode6) === opt.value) {
+						option.selected = true;
+					}
+					lograte_value.appendChild(option);
+				});
+
+				cell2.appendChild(lograte_value);
+
+				hideSaveStatus();
+
+		// adatgyujtes ---------------------------------------------------------
+
+		var table = document.createElement('table');
+		table.setAttribute('style', 'border-spacing: 5px; width:100%');
+		document.getElementById('jek_content').appendChild(table);
+		var row = table.insertRow();
+		var cell1 = row.insertCell(0);
+
+		var submitButton = document.createElement('input');
+		submitButton.setAttribute('type', 'submit');
+		submitButton.classList.add('save-data');
+		submitButton.setAttribute('value', translationLoader.t("Save"));
+		submitButton.setAttribute('id', 'submitBtn_' + i);
+		cell1.appendChild(submitButton);
+
+
+		document.getElementById('submitBtn_' + i).addEventListener('click', (function (i) {
+			return function () {
+				
+				showSaveStatus();
+
+				let mode1List = [], mode2List = [], mode3List = [], mode4List = [];
+
+				dropBlockConfigs.forEach(cfg => {
+					let zone = document.getElementById(cfg.targetId + '_' + i);
+					if (!zone || !zone.dataset[cfg.datasetKey]) return;
+
+					let ids = zone.dataset[cfg.datasetKey].split(',').filter(Boolean);
+					ids.forEach(id => {
+						let item = cfg.modePrefix ? `${cfg.modePrefix}:${id}` : id;
+						switch (cfg.mode) {
+							case 'Mode1': mode1List.push(item); break;
+							case 'Mode2': mode2List.push(item); break;
+							case 'Mode3': mode3List.push(item); break;
+							case 'Mode4': mode4List.push(item); break;
+						}
+					});
+				});
+
+				// Mode5 és Mode6 input mezők ellenőrzése és kiolvasása
+				let mode5Input = document.getElementById('text_1_mode5_' + i);
+				let mode6Input = document.getElementById('text_1_mode6_' + i);
+
+				if (!mode5Input || !mode6Input) {
+					console.error(`Hiba: Hiányzik a 'mode5' vagy 'mode6' mező! (text_1_mode5_${i}, text_1_mode6_${i})`);
+					hideSaveStatus();
+					alert(`Hiba: Nem található minden mező (${jek[i].name})`);
+					return;
+				}
+
+				let mode5 = mode5Input.value.trim();
+				let mode6 = mode6Input.value.trim();
+
+				const port = window.location.port ? ":" + window.location.port : "";
+
+				const query = [
+					`Mode1=${encodeURIComponent(mode1List.join(','))}`,
+					`Mode2=${encodeURIComponent(mode2List.join(','))}`,
+					`Mode3=${encodeURIComponent(mode3List.join(','))}`,
+					`Mode4=${encodeURIComponent(mode4List.join(','))}`,
+					`Mode5=${encodeURIComponent(mode5)}`,
+					`Mode6=${encodeURIComponent(mode6)}`
+				].join('&');
+
+				const url = `${window.location.protocol}//${window.location.hostname}${port}/json.htm?type=command&param=updatehardware&htype=94&extra=JEK&idx=${jek[i].id}&enabled=true&datatimeout=0&name=${jek[i].name}&address=${jek[i].host}&port=${jek[i].port}&username=${jek[i].uname}&password=${jek[i].pass}&${query}`;
+
+				try {
+					const xhr = new XMLHttpRequest();
+					xhr.open("GET", url, true);
+					xhr.onload = function () {
+						if (xhr.status === 200) {
+							//alert(`Mentés sikeres: ${jek[i].name}`);
+							location.reload();
+						} else {
+							alert(`Hiba történt (${xhr.status}): ${jek[i].name}`);
+						}
+					};
+					xhr.onerror = function () {
+						hideSaveStatus();
+						alert(`Hálózati hiba: ${jek[i].name}`);
+					};
+					xhr.send();
+				} catch (e) {
+					hideSaveStatus();
+					console.error("Mentési kivétel:", e);
+					alert(`Hiba a mentés közben (${jek[i].name})`);
+				}
+			};
+		})(i));
+
+
+
+	}
+}
+});
+</script>

@@ -1,0 +1,21 @@
+{
+	"No active plugins!": "Žádné aktivní pluginy!",
+	"The last day:": "Za poslední den:",
+	"Data sent:": "Odeslaná data:",
+	"Data is successfully saved": "Data byla úspěšně uložena do",
+	"It was a mistake": "Došlo k chybě při",
+	"when saving event data.": "ukládání dat události.",
+	"Logging level": "Úroveň protokolování",
+	"Save": "Uložit",
+	"Setting of operating parameters": "Nastavení provozních parametrů",
+	"➕ Add external thermometer": "➕ Přidat venkovní teploměr",
+	"On arrival ON": "Při příchodu ZAP",
+	"OFF upon arrival": "Při příchodu VYP",
+	"When leaving ON": "Při odchodu ZAP",
+	"When leaving, OFF": "Při odchodu VYP",
+	"➕ Add  On arrival ON": "➕ Přidat zapnutí při příchodu",
+	"➕ Add OFF upon arrival": "➕ Přidat vypnutí při příchodu",
+	"➕ Add When leaving ON": "➕ Přidat zapnutí při odchodu",
+	"➕ Add When leaving, OFF": "➕ Přidat vypnutí při odchodu",
+	"Presence name": "Název přítomnosti"
+}

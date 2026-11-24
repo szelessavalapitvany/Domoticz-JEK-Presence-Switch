@@ -1,0 +1,21 @@
+{
+	"No active plugins!": "Brak aktywnych wtyczek!",
+	"The last day:": "Ostatnia doba:",
+	"Data sent:": "Wysłane dane:",
+	"Data is successfully saved": "Dane zostały pomyślnie zapisane w",
+	"It was a mistake": "Wystąpił błąd podczas",
+	"when saving event data.": "zapisywania danych zdarzenia.",
+	"Logging level": "Poziom logowania",
+	"Save": "Zapisz",
+	"Setting of operating parameters": "Ustawienia parametrów pracy",
+	"➕ Add external thermometer": "➕ Dodaj termometr zewnętrzny",
+	"On arrival ON": "Po przybyciu WŁ.",
+	"OFF upon arrival": "Po przybyciu WYŁ.",
+	"When leaving ON": "Przy wyjściu WŁ.",
+	"When leaving, OFF": "Przy wyjściu WYŁ.",
+	"➕ Add  On arrival ON": "➕ Dodaj WŁ. po przybyciu",
+	"➕ Add OFF upon arrival": "➕ Dodaj WYŁ. po przybyciu",
+	"➕ Add When leaving ON": "➕ Dodaj WŁ. przy wyjściu",
+	"➕ Add When leaving, OFF": "➕ Dodaj WYŁ. przy wyjściu",
+	"Presence name": "Nazwa obecności"
+}

@@ -1,0 +1,21 @@
+{
+	"No active plugins!": "Ei aktiivisia lisäosia!",
+	"The last day:": "Viimeisen vuorokauden aikana:",
+	"Data sent:": "Lähetetyt tiedot:",
+	"Data is successfully saved": "Tiedot tallennettiin onnistuneesti kohteeseen",
+	"It was a mistake": "Tapahtui virhe",
+	"when saving event data.": "tapahtumatietoja tallennettaessa.",
+	"Logging level": "Lokitustaso",
+	"Save": "Tallenna",
+	"Setting of operating parameters": "Toimintaparametrien asetukset",
+	"➕ Add external thermometer": "➕ Lisää ulkolämpömittari",
+	"On arrival ON": "Saapuessa PÄÄLLE",
+	"OFF upon arrival": "Saapuessa POIS",
+	"When leaving ON": "Poistuessa PÄÄLLE",
+	"When leaving, OFF": "Poistuessa POIS",
+	"➕ Add  On arrival ON": "➕ Lisää saapuessa PÄÄLLE",
+	"➕ Add OFF upon arrival": "➕ Lisää saapuessa POIS",
+	"➕ Add When leaving ON": "➕ Lisää poistuessa PÄÄLLE",
+	"➕ Add When leaving, OFF": "➕ Lisää poistuessa POIS",
+	"Presence name": "Läsnäolon nimi"
+}

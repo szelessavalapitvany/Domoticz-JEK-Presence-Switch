@@ -1,0 +1,21 @@
+{
+	"No active plugins!": "Geen actieve plug-ins!",
+	"The last day:": "Afgelopen 24 uur:",
+	"Data sent:": "Verzonden gegevens:",
+	"Data is successfully saved": "Gegevens zijn succesvol opgeslagen in",
+	"It was a mistake": "Er is een fout opgetreden bij het",
+	"when saving event data.": "opslaan van gebeurtenisgegevens.",
+	"Logging level": "Logniveau",
+	"Save": "Opslaan",
+	"Setting of operating parameters": "Instelling van bedrijfsparameters",
+	"➕ Add external thermometer": "➕ Buitenthermometer toevoegen",
+	"On arrival ON": "Bij aankomst AAN",
+	"OFF upon arrival": "Bij aankomst UIT",
+	"When leaving ON": "Bij vertrek AAN",
+	"When leaving, OFF": "Bij vertrek UIT",
+	"➕ Add  On arrival ON": "➕ Bij aankomst AAN toevoegen",
+	"➕ Add OFF upon arrival": "➕ Bij aankomst UIT toevoegen",
+	"➕ Add When leaving ON": "➕ Bij vertrek AAN toevoegen",
+	"➕ Add When leaving, OFF": "➕ Bij vertrek UIT toevoegen",
+	"Presence name": "Naam van aanwezigheid"
+}

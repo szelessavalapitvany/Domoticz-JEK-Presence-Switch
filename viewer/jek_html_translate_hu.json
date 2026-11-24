@@ -1,0 +1,21 @@
+{
+	"No active plugins!": "Nincs aktiv plugin!",
+	"The last day:": "Az elmúlt nap:",
+	"Data sent:": "Adatok elküldve:",
+	"Data is successfully saved": "Adatok sikeresen elmentve az",
+	"It was a mistake": "Hiba történt az",
+	"when saving event data.": "esemény adatai mentése során.",
+	"Logging level": "Loggolás szintje",
+	"Save": "Mentés",
+	"Setting of operating parameters": "Működési paraméterek beállítása",
+	"➕ Add external thermometer": "➕ Külső hőmérő hozzáadása",
+	"On arrival ON": "Érkezéskor BE",
+	"OFF upon arrival": "Érkezéskor KI",
+	"When leaving ON": "Távozáskor BE",
+	"When leaving, OFF": "Távozáskor KI",
+	"➕ Add  On arrival ON": "➕ Érkezéskor BE hozzáadása",
+	"➕ Add OFF upon arrival": "➕ Érkezéskor KI hozzáadása",
+	"➕ Add When leaving ON": "➕ Távozáskor BE hozzáadása",
+	"➕ Add When leaving, OFF": "➕ Távozáskor KI hozzáadása",
+	"Presence name": "Jelenlét neve"
+}

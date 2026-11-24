@@ -1,0 +1,21 @@
+{
+	"No active plugins!": "没有活动的插件！",
+	"The last day:": "过去24小时：",
+	"Data sent:": "已发送数据：",
+	"Data is successfully saved": "数据已成功保存至",
+	"It was a mistake": "发生错误：",
+	"when saving event data.": "保存事件数据时。",
+	"Logging level": "日志级别",
+	"Save": "保存",
+	"Setting of operating parameters": "运行参数设置",
+	"➕ Add external thermometer": "➕ 添加室外温度计",
+	"On arrival ON": "到家时开启",
+	"OFF upon arrival": "到家时关闭",
+	"When leaving ON": "离家时开启",
+	"When leaving, OFF": "离家时关闭",
+	"➕ Add  On arrival ON": "➕ 添加到家时开启",
+	"➕ Add OFF upon arrival": "➕ 添加到家时关闭",
+	"➕ Add When leaving ON": "➕ 添加离家时开启",
+	"➕ Add When leaving, OFF": "➕ 添加离家时关闭",
+	"Presence name": "在家状态名称"
+}

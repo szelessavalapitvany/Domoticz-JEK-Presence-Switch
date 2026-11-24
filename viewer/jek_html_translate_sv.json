@@ -1,0 +1,21 @@
+{
+	"No active plugins!": "Inga aktiva insticksprogram!",
+	"The last day:": "Senaste dygnet:",
+	"Data sent:": "Skickade data:",
+	"Data is successfully saved": "Data har sparats i",
+	"It was a mistake": "Ett fel uppstod vid",
+	"when saving event data.": "sparandet av händelsedata.",
+	"Logging level": "Loggnivå",
+	"Save": "Spara",
+	"Setting of operating parameters": "Inställning av driftparametrar",
+	"➕ Add external thermometer": "➕ Lägg till utomhustermometer",
+	"On arrival ON": "Vid ankomst PÅ",
+	"OFF upon arrival": "Vid ankomst AV",
+	"When leaving ON": "Vid avfärd PÅ",
+	"When leaving, OFF": "Vid avfärd AV",
+	"➕ Add  On arrival ON": "➕ Lägg till PÅ vid ankomst",
+	"➕ Add OFF upon arrival": "➕ Lägg till AV vid ankomst",
+	"➕ Add When leaving ON": "➕ Lägg till PÅ vid avfärd",
+	"➕ Add When leaving, OFF": "➕ Lägg till AV vid avfärd",
+	"Presence name": "Namn på närvaro"
+}

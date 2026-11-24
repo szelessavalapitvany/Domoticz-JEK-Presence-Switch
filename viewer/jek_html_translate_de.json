@@ -1,0 +1,21 @@
+{
+	"No active plugins!": "Keine aktiven Plugins!",
+	"The last day:": "Letzter Tag:",
+	"Data sent:": "Gesendete Daten:",
+	"Data is successfully saved": "Daten wurden erfolgreich gespeichert in",
+	"It was a mistake": "Ein Fehler ist aufgetreten beim",
+	"when saving event data.": "Speichern der Ereignisdaten.",
+	"Logging level": "Protokollierungsstufe",
+	"Save": "Speichern",
+	"Setting of operating parameters": "Einstellung der Betriebsparameter",
+	"➕ Add external thermometer": "➕ Außenthermometer hinzufügen",
+	"On arrival ON": "Bei Ankunft EIN",
+	"OFF upon arrival": "Bei Ankunft AUS",
+	"When leaving ON": "Bei Verlassen EIN",
+	"When leaving, OFF": "Bei Verlassen AUS",
+	"➕ Add  On arrival ON": "➕ Bei Ankunft EIN hinzufügen",
+	"➕ Add OFF upon arrival": "➕ Bei Ankunft AUS hinzufügen",
+	"➕ Add When leaving ON": "➕ Bei Verlassen EIN hinzufügen",
+	"➕ Add When leaving, OFF": "➕ Bei Verlassen AUS hinzufügen",
+	"Presence name": "Name der Anwesenheit"
+}

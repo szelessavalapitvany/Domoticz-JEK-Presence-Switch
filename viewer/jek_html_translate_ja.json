@@ -1,0 +1,21 @@
+{
+	"No active plugins!": "有効なプラグインがありません！",
+	"The last day:": "過去24時間：",
+	"Data sent:": "送信データ：",
+	"Data is successfully saved": "データは正常に保存されました：",
+	"It was a mistake": "エラーが発生しました：",
+	"when saving event data.": "イベントデータの保存中。",
+	"Logging level": "ログレベル",
+	"Save": "保存",
+	"Setting of operating parameters": "動作パラメータの設定",
+	"➕ Add external thermometer": "➕ 外気温センサーを追加",
+	"On arrival ON": "到着時にオン",
+	"OFF upon arrival": "到着時にオフ",
+	"When leaving ON": "外出時にオン",
+	"When leaving, OFF": "外出時にオフ",
+	"➕ Add  On arrival ON": "➕ 到着時オンを追加",
+	"➕ Add OFF upon arrival": "➕ 到着時オフを追加",
+	"➕ Add When leaving ON": "➕ 外出時オンを追加",
+	"➕ Add When leaving, OFF": "➕ 外出時オフを追加",
+	"Presence name": "在宅状態の名前"
+}

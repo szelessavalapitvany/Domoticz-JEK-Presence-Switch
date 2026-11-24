@@ -1,0 +1,21 @@
+{
+	"No active plugins!": "Ingen aktive programtillegg!",
+	"The last day:": "Siste døgn:",
+	"Data sent:": "Sendte data:",
+	"Data is successfully saved": "Dataene ble lagret i",
+	"It was a mistake": "Det oppstod en feil ved",
+	"when saving event data.": "lagring av hendelsesdata.",
+	"Logging level": "Loggnivå",
+	"Save": "Lagre",
+	"Setting of operating parameters": "Innstilling av driftsparametere",
+	"➕ Add external thermometer": "➕ Legg til utetermometer",
+	"On arrival ON": "Ved ankomst PÅ",
+	"OFF upon arrival": "Ved ankomst AV",
+	"When leaving ON": "Ved avreise PÅ",
+	"When leaving, OFF": "Ved avreise AV",
+	"➕ Add  On arrival ON": "➕ Legg til PÅ ved ankomst",
+	"➕ Add OFF upon arrival": "➕ Legg til AV ved ankomst",
+	"➕ Add When leaving ON": "➕ Legg til PÅ ved avreise",
+	"➕ Add When leaving, OFF": "➕ Legg til AV ved avreise",
+	"Presence name": "Navn på tilstedeværelse"
+}
