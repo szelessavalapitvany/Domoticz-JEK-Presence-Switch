@@ -155,12 +155,7 @@ function getJelen() {
 								success: function (resultswitchName) {
 									jelenObj.switchnameakt = [];
 									resultswitchName.result.forEach(function (item) {
-										if (
-											Number(item.Used) === 1 &&
-											item.SwitchType &&
-											item.SwitchType.toLowerCase().includes('on/off') &&
-											!allUsedIdxSet.has(Number(item.idx))
-										) {
+										if ( item.SwitchType && item.SwitchType.toLowerCase().includes('on/off') && !allUsedIdxSet.has(Number(item.idx))) {
 											jelenObj.switchnameakt.push(item.Name + ':' + item.idx);
 										}
 									});
@@ -197,7 +192,7 @@ function getJelen() {
 
 							var resultOnOff = [];
 							for (var j = 0; j < resultJelen.result.length; j++) {
-								if (jelenObj.id == resultJelen.result[j].HardwareID && resultJelen.result[j].Unit == 3) {
+								if (jelenObj.id == resultJelen.result[j].HardwareID && resultJelen.result[j].Unit == 4) {
 
 									request = proto + address + ":" + port.toString() + switchReq + resultJelen.result[j].idx;
 
@@ -223,7 +218,7 @@ function getJelen() {
 
 							var resultOffOn = [];
 							for (var j = 0; j < resultJelen.result.length; j++) {
-								if (jelenObj.id == resultJelen.result[j].HardwareID && resultJelen.result[j].Unit == 4) {
+								if (jelenObj.id == resultJelen.result[j].HardwareID && resultJelen.result[j].Unit == 3) {
 
 									request = proto + address + ":" + port.toString() + switchReq + resultJelen.result[j].idx;
 

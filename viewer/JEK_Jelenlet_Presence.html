@@ -223,103 +223,110 @@
 		}
 
 		function showUsageChart(data, i) {
-			
-			var chartElement = $('#graphk'+i);
-			
-			var series = [];
 
-			if(data.onon != undefined) {
-				series.push({
-					name: translationLoader.t("On arrival ON"),
-					yAxis: 0,
-					data: data.onon.map(function (item) {
-						return {
-							x: +(new Date(item.Date)),
-							y: item.Data === "On" ? 100 : 0
-						}
-					})
+			var chartElement = $('#graphk' + i);
+			var now = Date.now();
+			var dayStart = now - 24 * 3600 * 1000;
+
+			var points = (data.onon || []).map(function(item) {
+				return {
+					x: Date.parse(item.Date.replace(' ', 'T') + 'Z'),
+					y: item.Data === 'On' ? 100 : 0
+				};
+			}).filter(function(point) {
+				return Number.isFinite(point.x);
+			});
+
+			points.sort(function(a, b) {
+				return a.x - b.x;
+			});
+
+			var previous = null;
+
+			points.forEach(function(point) {
+				if (point.x <= dayStart) {
+					previous = point;
+				}
+			});
+
+			points = points.filter(function(point) {
+				return point.x > dayStart && point.x <= now;
+			});
+
+			if (previous) {
+				points.unshift({
+					x: dayStart,
+					y: previous.y
 				});
 			}
-			if(data.onoff != undefined) {
-				series.push({
-					name: translationLoader.t("OFF upon arrival"),
-					yAxis: 0,
-					data: data.onoff.map(function (item) {
-						return {
-							x: +(new Date(item.Date)),
-							y: item.Data === "On" ? 100 : 0
-						}
-					})
-				});
-			}
-			if(data.offon != undefined) {
-				series.push({
-					name: translationLoader.t("When leaving ON"),
-					yAxis: 0,
-					data: data.offon.map(function (item) {
-						return {
-							x: +(new Date(item.Date)),
-							y: item.Data === "On" ? 100 : 0
-						}
-					})
-				});
-			}
-			if(data.offoff != undefined) {
-				series.push({
-					name: translationLoader.t("When leaving, OFF"),
-					yAxis: 0,
-					step: true,
-					data: data.offoff.map(function (item) {
-						return {
-							x: +(new Date(item.Date)),
-							y: item.Data === "On" ? 100 : 0
-						}
-					})
-				});
-			}
+
 			chartElement.highcharts({
 				chart: {
-					zoomType: 'x'
+					zoomType: 'x',
+					height: 280
 				},
+
 				title: {
 					text: ''
 				},
+
 				xAxis: {
 					type: 'datetime',
-					minTickInterval: 24 * 3600 * 1000
-				},
-				yAxis: [
-					{
-						title: {
-							text: translationLoader.t("ON / OFF")
-						},
-						maxPadding: 0
-					}
-				],
-				tooltip: {
-					formatter: function () {
-						return Highcharts.dateFormat('%Y-%m-%d %H:%M', this.x) + '<br/>' + this.series.name + ': ' + Highcharts.numberFormat(this.y,1);
+					min: dayStart,
+					max: now,
+					tickInterval: 3 * 3600 * 1000,
+					labels: {
+						format: '{value:%H:%M}'
 					}
 				},
-				plotOptions: {
-					column: {
-						minPointLength: 4,
-						pointPadding: 0.1,
-						groupPadding: 0,
-						dataLabels: {
-							enabled: true,
-							color: 'white',
-							format: '{y} °C'
-						}
+
+				yAxis: {
+					title: {
+						text: null
 					},
-					series: {
-						turboThreshold : 0
+					min: -5,
+					max: 105,
+					startOnTick: false,
+					endOnTick: false,
+					tickPositions: [0, 100],
+					labels: {
+						formatter: function() {
+							return this.value === 100 ? 'BE' : 'KI';
+						}
 					}
 				},
-				legend: {
-					enabled: true
+
+				tooltip: {
+					formatter: function() {
+						return Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +
+							'<br/>' + (this.y === 100 ? 'Van jelenlét' : 'Nincs jelenlét');
+					}
 				},
-				series: series
+
+				plotOptions: {
+					series: {
+						step: 'left',
+						lineWidth: 2,
+						marker: {
+							enabled: true,
+							radius: 3
+						},
+						animation: false
+					}
+				},
+
+				legend: {
+					enabled: false
+				},
+
+				credits: {
+					enabled: false
+				},
+
+				series: [{
+					name: translationLoader.t("Presence"),
+					data: points
+				}]
 			});
 		}
 		var jek=getJelen();
